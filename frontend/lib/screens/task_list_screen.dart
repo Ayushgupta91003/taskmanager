@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/task_creation_screen.dart';
+import 'package:frontend/screens/task_detail_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,8 +69,20 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   title: Text(task['title']),
                   subtitle: Text(task['description'] ?? ""),
                   trailing: Text(task['status']),
-                  onTap: () {
-                    // Yahan aap update/delete ka logic daal sakte hain ya task detail screen par navigate kar sakte hain.
+                  // onTap: () {
+                  //   // Yahan aap update/delete ka logic daal sakte hain ya task detail screen par navigate kar sakte hain.
+                  // },
+                  // Inside ListTile onTap in TaskListScreen
+                  onTap: () async {
+                    bool? refresh = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TaskDetailScreen(task: task),
+                      ),
+                    );
+                    if (refresh == true) {
+                      fetchTasks(); // Refresh task list on return
+                    }
                   },
                 );
               },
