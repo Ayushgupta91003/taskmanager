@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/global.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,7 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   Future<void> login() async {
-    final url = Uri.parse("http://10.0.3.236:5000/api/auth/login");
+    // final url = Uri.parse("http://10.0.3.236:5000/api/auth/login");
+    final url = Uri.parse("${baseUrl}/api/auth/login");
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},

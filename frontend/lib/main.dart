@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'providers/task_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/task_list_screen.dart';
 
@@ -25,7 +27,6 @@ class _MyAppState extends State<MyApp> {
   _checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    // Optionally, validate the token further if needed.
     setState(() {
       _defaultHome = (token != null && token.isNotEmpty)
           ? TaskListScreen()
@@ -43,14 +44,20 @@ class _MyAppState extends State<MyApp> {
         ),
       );
     }
-    return MaterialApp(
-      title: 'Task Manager',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: _defaultHome,
-      routes: {
-        '/login': (context) => LoginScreen(),
-        '/tasks': (context) => TaskListScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
+        // You can add more providers here if needed
+      ],
+      child: MaterialApp(
+        title: 'Task Manager',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: _defaultHome,
+        routes: {
+          '/login': (context) => LoginScreen(),
+          '/tasks': (context) => TaskListScreen(),
+        },
+      ),
     );
   }
 }
